@@ -12,6 +12,8 @@ app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def teardown_storage(exception):
+    """Closes connection to the storage engine on request response.
+    """
     storage.close()
 
 
