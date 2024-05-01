@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-initialize the models package
+initialize the storage engine
 """
 
 from os import getenv
