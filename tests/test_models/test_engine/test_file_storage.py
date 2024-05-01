@@ -57,7 +57,7 @@ test_file_storage.py'])
         self.assertIsNot(FileStorage.__doc__, None,
                          "FileStorage class needs a docstring")
         self.assertTrue(len(FileStorage.__doc__) >= 1,
-                        "FileStorage class needs a docstring")
+                        "FileStorage class needs a meaningful docstring")
 
     def test_fs_func_docstrings(self):
         """Test for the presence of docstrings in FileStorage methods"""
@@ -65,12 +65,15 @@ test_file_storage.py'])
             self.assertIsNot(func[1].__doc__, None,
                              "{:s} method needs a docstring".format(func[0]))
             self.assertTrue(len(func[1].__doc__) >= 1,
-                            "{:s} method needs a docstring".format(func[0]))
+                            "{:s} method needs a meaningful docstring"
+                            .format(func[0]))
 
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    storage_type_err = "not testing file storage"
+
+    @unittest.skipIf(models.storage_t == 'db', storage_type_err)
     def test_all_returns_dict(self):
         """Test that all returns the FileStorage.__objects attr"""
         storage = FileStorage()
@@ -78,7 +81,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(type(new_dict), dict)
         self.assertIs(new_dict, storage._FileStorage__objects)
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    @unittest.skipIf(models.storage_t == 'db', storage_type_err)
     def test_new(self):
         """test that new adds an object to the FileStorage.__objects attr"""
         storage = FileStorage()
@@ -94,7 +97,7 @@ class TestFileStorage(unittest.TestCase):
                 self.assertEqual(test_dict, storage._FileStorage__objects)
         FileStorage._FileStorage__objects = save
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    @unittest.skipIf(models.storage_t == 'db', storage_type_err)
     def test_save(self):
         """Test that save properly saves objects to file.json"""
         storage = FileStorage()
@@ -113,3 +116,45 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', storage_type_err)
+    def test_get(self):
+        """"""
+        storage = FileStorage()
+        for key, value in classes.items():
+            with self.subTest(key=key, value=value):
+                instance = value()
+                storage.new(instance)
+                obj = storage.get(value, instance.id)
+                self.assertIsInstance(obj, value)
+                self.assertEqual(instance, obj)
+
+    @unittest.skipIf(models.storage_t == 'db', storage_type_err)
+    def test_get_missing_param(self):
+        """"""
+        storage = FileStorage()
+        self.assertIsNone(storage.get())
+        self.assertIsNone(storage.get(User))
+        self.assertIsNone(storage.get(User, ''))
+        self.assertIsNone(storage.get(''))
+
+    @unittest.skipIf(models.storage_t == 'db', storage_type_err)
+    def test_count_all(self):
+        """"""
+        storage = FileStorage()
+        user = User()
+        state = State()
+        storage.new(user)
+        storage.new(state)
+        self.assertEqual(storage.count(), 2)
+
+    @unittest.skipIf(models.storage_t == 'db', storage_type_err)
+    def test_count_cls(self):
+        """"""
+        storage = FileStorage()
+        user = User()
+        state = State()
+        storage.new(user)
+        storage.new(state)
+        self.assertEqual(storage.count(User), 1)
+        self.assertEqual(storage.count(State), 1)

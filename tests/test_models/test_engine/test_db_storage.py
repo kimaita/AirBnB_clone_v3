@@ -70,19 +70,63 @@ test_db_storage.py'])
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    storage_type_err = "not testing db storage"
+
+    @unittest.skipIf(models.storage_t != 'db', storage_type_err)
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
         self.assertIs(type(models.storage.all()), dict)
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', storage_type_err)
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', storage_type_err)
     def test_new(self):
         """test that new adds an object to the database"""
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', storage_type_err)
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', storage_type_err)
+    def test_get(self):
+        """"""
+        storage = DBStorage()
+        for key, value in classes.items():
+            with self.subTest(key=key, value=value):
+                instance = value()
+                storage.new(instance)
+                obj = storage.get(value, instance.id)
+                self.assertIsInstance(obj, value)
+                self.assertEqual(instance, obj)
+
+    @unittest.skipIf(models.storage_t != 'db', storage_type_err)
+    def test_get_missing_param(self):
+        """"""
+        storage = DBStorage()
+        self.assertIsNone(storage.get())
+        self.assertIsNone(storage.get(User))
+        self.assertIsNone(storage.get(User, ''))
+        self.assertIsNone(storage.get(''))
+
+    @unittest.skipIf(models.storage_t == 'db', storage_type_err)
+    def test_count_all(self):
+        """"""
+        storage = DBStorage()
+        user = User()
+        state = State()
+        storage.new(user)
+        storage.new(state)
+        self.assertEqual(storage.count(), 2)
+
+    @unittest.skipIf(models.storage_t == 'db', storage_type_err)
+    def test_count_cls(self):
+        """"""
+        storage = DBStorage()
+        user = User()
+        state = State()
+        storage.new(user)
+        storage.new(state)
+        self.assertEqual(storage.count(User), 1)
+        self.assertEqual(storage.count(State), 1)
