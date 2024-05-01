@@ -1,4 +1,4 @@
-#!/usr.bin/python3
+#!/usr/bin/python3
 """Instantiates the app_views Blueprint"""
 from flask import Blueprint
 
