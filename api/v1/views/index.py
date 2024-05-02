@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""defines routes for the API"""
+""" Defines routes on the API """
 from api.v1.views import app_views
 from api.v1.app import storage
 from models.amenity import Amenity
