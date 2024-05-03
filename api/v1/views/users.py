@@ -2,9 +2,10 @@
 """Handles REST requests for City objects"""
 
 from api.v1.app import storage
-from api.v1.views import users
 from models.user import User
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, Blueprint
+
+users = Blueprint('users', __name__, url_prefix='/users')
 
 
 @users.route('/', methods=['GET'], strict_slashes=False)

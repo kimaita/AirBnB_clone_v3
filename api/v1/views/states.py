@@ -2,10 +2,10 @@
 """Handles REST requests for State objects"""
 
 from api.v1.app import storage
-from api.v1.views import states
 from models.state import State
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, Blueprint
 
+states = Blueprint('states', __name__, url_prefix='/states')
 
 @states.route('/', methods=['GET'], strict_slashes=False)
 def get_all_states():

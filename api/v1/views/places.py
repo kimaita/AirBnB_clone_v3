@@ -2,12 +2,13 @@
 """Handles REST requests for City objects"""
 
 from api.v1.app import storage
-from api.v1.views import cities, places
+from api.v1.views.cities import cities
 from models.place import Place
 from models.city import City
 from models.user import User
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, Blueprint
 
+places = Blueprint('places', __name__, url_prefix='/places')
 
 @cities.route('/<city_id>/places', methods=['GET'], strict_slashes=False)
 def get_city_places(city_id):

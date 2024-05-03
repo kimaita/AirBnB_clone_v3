@@ -2,10 +2,10 @@
 """Handles REST requests for City objects"""
 
 from api.v1.app import storage
-from api.v1.views import amenities
 from models.amenity import Amenity
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, Blueprint
 
+amenities = Blueprint('amenities', __name__, url_prefix='/amenities')
 
 @amenities.route('/', methods=['GET'], strict_slashes=False)
 def get_all_amenities():
