@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-"""Runs a Flask web server"""
+""" Runs a Flask web server """
 
-from api.v1.views import app_views
 from models import storage
+from api.v1.views import app_views
 from flask import Flask
 import os
 
