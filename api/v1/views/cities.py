@@ -2,15 +2,13 @@
 """Handles REST requests for City objects"""
 
 from api.v1.app import storage
-from api.v1.views.states import states
+from api.v1.views import app_views
 from models.state import State
 from models.city import City
-from flask import jsonify, request, abort, Blueprint
-
-cities = Blueprint('cities', __name__, url_prefix='/cities')
+from flask import jsonify, request, abort
 
 
-@cities.route('/<city_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>', methods=['GET'])
 def get_city(city_id):
     """Returns a single City by id"""
     city = storage.get(City, city_id)
@@ -20,7 +18,7 @@ def get_city(city_id):
     return city.to_dict()
 
 
-@states.route('/<state_id>/cities', methods=['GET'], strict_slashes=False)
+@app_views.route('states/<state_id>/cities', methods=['GET'])
 def get_all_state_cities(state_id):
     """Returns a list of all cities for the State"""
     state = storage.get(State, state_id)
@@ -31,7 +29,7 @@ def get_all_state_cities(state_id):
     return jsonify(objs)
 
 
-@states.route('/<state_id>/cities', methods=['POST'], strict_slashes=False)
+@app_views.route('states/<state_id>/cities', methods=['POST'])
 def create_city(state_id):
     """Creates a new City from POST data and persists it in storage
     """
@@ -51,7 +49,7 @@ def create_city(state_id):
     return city.to_dict(), 201
 
 
-@cities.route('/<city_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/cities/<city_id>', methods=['PUT'])
 def update_city(city_id):
     """Updates City object properties"""
     city = storage.get(City, city_id)
@@ -72,7 +70,7 @@ def update_city(city_id):
     return city.to_dict(), 200
 
 
-@cities.route('/<city_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/cities/<city_id>', methods=['DELETE'])
 def delete_city(city_id):
     """Deletes a City object, returning an empty dict"""
 

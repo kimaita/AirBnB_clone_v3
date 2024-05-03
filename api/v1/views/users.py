@@ -2,13 +2,12 @@
 """Handles REST requests for City objects"""
 
 from api.v1.app import storage
+from api.v1.views import app_views
 from models.user import User
-from flask import jsonify, request, abort, Blueprint
-
-users = Blueprint('users', __name__, url_prefix='/users')
+from flask import jsonify, request, abort
 
 
-@users.route('/', methods=['GET'], strict_slashes=False)
+@app_views.route('users/', methods=['GET'])
 def get_all_users():
     """Returns a list of all users"""
     users = storage.all(User)
@@ -16,7 +15,7 @@ def get_all_users():
     return jsonify([obj.to_dict() for obj in users.values()])
 
 
-@users.route('/<user_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('users/<user_id>', methods=['GET'])
 def get_user(user_id):
     """Returns a single User by id"""
     user = storage.get(User, user_id)
@@ -26,7 +25,7 @@ def get_user(user_id):
     return user.to_dict()
 
 
-@users.route('/', methods=['POST'], strict_slashes=False)
+@app_views.route('users/', methods=['POST'])
 def create_user():
     """Creates a new User from POST data and persists it in storage
     """
@@ -43,7 +42,7 @@ def create_user():
     return user.to_dict(), 201
 
 
-@users.route('/<user_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('users/<user_id>', methods=['PUT'])
 def update_user(user_id):
     """Updates User properties"""
     user = storage.get(User, user_id)
@@ -64,7 +63,7 @@ def update_user(user_id):
     return user.to_dict(), 200
 
 
-@users.route('/<user_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('users/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
     """Deletes a user, returning an empty dict"""
 

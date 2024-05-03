@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Defines routes on the API """
+
 from api.v1.views import app_views
 from api.v1.app import storage
 from models.amenity import Amenity
@@ -10,13 +11,13 @@ from models.state import State
 from models.user import User
 
 
-@app_views.route('/status', methods=['GET'], strict_slashes=False)
+@app_views.route('/status', methods=['GET'])
 def get_status():
     """Returns a status OK message"""
     return {'status': 'OK'}
 
 
-@app_views.route('/stats', methods=['GET'], strict_slashes=False)
+@app_views.route('/stats', methods=['GET'])
 def get_object_stats():
     """Retrieves object counts by type"""
     classes = {'amenities': Amenity, 'cities': City, 'places': Place,

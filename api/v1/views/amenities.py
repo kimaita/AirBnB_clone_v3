@@ -2,12 +2,12 @@
 """Handles REST requests for City objects"""
 
 from api.v1.app import storage
+from api.v1.views import app_views
 from models.amenity import Amenity
-from flask import jsonify, request, abort, Blueprint
+from flask import jsonify, request, abort
 
-amenities = Blueprint('amenities', __name__, url_prefix='/amenities')
 
-@amenities.route('/', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities', methods=['GET'])
 def get_all_amenities():
     """Returns a list of all amenities"""
     amenities = storage.all(Amenity)
@@ -15,7 +15,7 @@ def get_all_amenities():
     return jsonify([obj.to_dict() for obj in amenities.values()])
 
 
-@amenities.route('/<amenity_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['GET'])
 def get_amenity(amenity_id):
     """Returns a single Amenity by id"""
     amenity = storage.get(Amenity, amenity_id)
@@ -25,7 +25,7 @@ def get_amenity(amenity_id):
     return amenity.to_dict()
 
 
-@amenities.route('/', methods=['POST'], strict_slashes=False)
+@app_views.route('/amenities', methods=['POST'])
 def create_amenity():
     """Creates a new Amenity from POST data and persists it in storage
     """
@@ -40,7 +40,7 @@ def create_amenity():
     return amenity.to_dict(), 201
 
 
-@amenities.route('/<amenity_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['PUT'])
 def update_amenity(amenity_id):
     """Updates Amenity properties"""
     amenity = storage.get(Amenity, amenity_id)
@@ -61,7 +61,7 @@ def update_amenity(amenity_id):
     return amenity.to_dict(), 200
 
 
-@amenities.route('/<amenity_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['DELETE'])
 def delete_amenity(amenity_id):
     """Deletes an amenity, returning an empty dict"""
 

@@ -2,19 +2,19 @@
 """Handles REST requests for State objects"""
 
 from api.v1.app import storage
+from api.v1.views import app_views
 from models.state import State
 from flask import jsonify, request, abort, Blueprint
 
-states = Blueprint('states', __name__, url_prefix='/states')
 
-@states.route('/', methods=['GET'], strict_slashes=False)
+@app_views.route('states/', methods=['GET'])
 def get_all_states():
     """Returns a list of all States"""
     objs = [state.to_dict() for state in storage.all(State).values()]
     return jsonify(objs)
 
 
-@states.route('/', methods=['POST'], strict_slashes=False)
+@app_views.route('states/', methods=['POST'])
 def create_state():
     """Creates a new State object from POST data and persists it in storage
     """
@@ -31,7 +31,7 @@ def create_state():
     return state.to_dict(), 201
 
 
-@states.route('/<state_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('states/<state_id>', methods=['GET'])
 def get_state(state_id):
     """Returns a single State objct, by id"""
     state = storage.get(State, state_id)
@@ -41,7 +41,7 @@ def get_state(state_id):
     return state.to_dict()
 
 
-@states.route('/<state_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('states/<state_id>', methods=['PUT'])
 def update_state(state_id):
     """Updates State object properties"""
     state = storage.get(State, state_id)
@@ -61,7 +61,7 @@ def update_state(state_id):
     return state.to_dict(), 200
 
 
-@states.route('/<state_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('states/<state_id>', methods=['DELETE'])
 def delete_state(state_id):
     """Deletes a State object, returning an empty dict"""
 
