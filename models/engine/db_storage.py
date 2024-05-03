@@ -63,7 +63,7 @@ class DBStorage:
         """
         if cls is not None:
             return self.__session.query(cls).count()
-        return sum([self.__session.query(cls_).count() for cls_ in classes.values()])
+        return sum([self.__session.query(c).count() for c in classes.values()])
 
     def new(self, obj):
         """add the object to the current database session"""
